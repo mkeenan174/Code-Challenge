@@ -35,13 +35,13 @@ class Timer extends Component{
 
     //Manages sets timer start time and calculates elapsed time
     timerStart(){
-
+        if(this.state.running === false){
        this.setState({
            running: true, 
            time: this.state.time,
            start : Date.now() - this.state.time,
        });
-
+    }
        this.stopwatch = setInterval(() =>{
             this.setState({
                 time: Date.now() - this.state.start
@@ -54,11 +54,23 @@ class Timer extends Component{
     // Stops timer
     timerStop(){
         clearInterval(this.stopwatch);
+        this.setState({
+            running: false
+        })
+    }
+
+    startStop(){
+        if(this.state.running === false){
+            this.timerStart();
+        }else{
+            this.timerStop();
+        }
     }
 
     //Resets timer to zero by resetting all states
     timerReset(){
         this.setState({
+            running: false,
             time: 0,
             start: 0,
             lap: 0
@@ -68,6 +80,7 @@ class Timer extends Component{
 
     //Calculates laptime and adds a lap object to the laptime array
     timerLap(){
+        if(this.state.running === true){
         let prevLap = this.state.lap;
         let presLap =  this.state.time;
         this.setState({
@@ -81,6 +94,7 @@ class Timer extends Component{
        console.log(this.lapTimes);
        this.saveLaps(this.lapTimes, this.lapCounter);
        this.displayCheck();
+        }
     }
     
     //Checks if the laptimes borad needs to be displayed
@@ -106,7 +120,7 @@ class Timer extends Component{
         return result;
     }
 
-    //Clears all laps fomr laptimes
+    //Clears all laps from laptimes
     clearAll(){
         this.lapTimes = []
         this.displayCheck();
@@ -119,22 +133,22 @@ class Timer extends Component{
         const { time} = this.state;
         let result = this.formatTime(time);
         let display = 'hidden';
+        let btnName = 'Start';
         if(this.state.lapDisplay === true) display = 'visible';
         console.log(display);
+        if(this.state.running === true)btnName = 'Stop';
         
 
         return (
          <div className='timer-container'>
-            
                 <h1 className='timer-display'> {result}</h1>
-                <button className='button' onClick={this.timerStart.bind(this)}>Start</button>
-                <button  className='button' onClick={this.timerStop.bind(this)}>Stop</button>
+                <button className='button' onClick={this.startStop.bind(this)}>{btnName}</button>
                 <button  className='button' onClick={this.timerReset.bind(this)}>Reset</button>
                 <button  className='button' onClick={this.timerLap.bind(this)}>Lap</button>
                 <div>
                 <h3 style={{visibility: display}}className='lap-header'>Lap Times</h3>
            
-               <ul>
+                <ul>
                   {
                       //Mapping over our laptimes passing lap attributes as props to the lap component.
                       this.lapTimes.map((lap, index) =>{
