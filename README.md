@@ -1,3 +1,13 @@
+This project requires an install of react to run
+
+The project can be started on a development server at localhost: 3000 by entering the command `npm start` within the project directory.
+
+The poster requried for part one if the code challenge is located with the src/poster folder.
+
+A fully deployed version of the application is available at https://mkeenan174.github.io/Code-Challenge/ for both mobile and desktop browsers. 
+
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
